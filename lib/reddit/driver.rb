@@ -49,7 +49,7 @@ module Lemtzas
         private
 
         def init_bunny_topic
-          conn = Bunny.new hostname: ENV['rabbitmq_url']
+          conn = Bunny.new hostname: ENV['rabbitmq_url'], user: ENV['rabbitmq_user'], pass: ENV['rabbitmq_pass']
           conn.start
 
           ch = conn.create_channel
