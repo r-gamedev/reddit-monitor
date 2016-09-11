@@ -14,7 +14,8 @@ require 'reddit/driver'
 %w(reddit_client_id
    reddit_client_secret
    reddit_username
-   reddit_password)
+   reddit_password
+   rabbitmq_url)
   .select { |k| !ENV[k] }
   .map { |k| puts "ENV['#{k}'] missing" }
   .map { abort('environment missing') }
