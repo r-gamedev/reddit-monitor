@@ -7,6 +7,7 @@ $VERBOSE = nil # tell ruby to shut the hell up
 
 require 'rubygems'
 require 'bundler/setup'
+require 'yaml'
 
 require 'reddit/driver'
 
@@ -15,19 +16,28 @@ require 'reddit/driver'
    reddit_client_secret
    reddit_username
    reddit_password
+   reddit_subreddit_name
+   reddit_scan_modmail
    rabbitmq_url)
   .select { |k| !ENV[k] }
   .map { |k| puts "ENV['#{k}'] missing" }
   .map { abort('environment missing') }
 ##################
 
+# Trick to allow a variety of truthy and falsy values.
+reddit_scan_modmail = !!YAML.load(ENV['reddit_scan_modmail'])
+
 # Script Intro #
 puts 'Hello, world!'
 puts "Process ID: #{Lemtzas::Common::Tracking.script_uuid}"
+puts "Subreddit to scan: #{ENV['reddit_subreddit_name']}"
+pubs "Scan Modmail? '#{ENV['reddit_scan_modmail']}' interpreted as '#{reddit_scan_modmail}'"
 ################
 
 # Run it
-driver = Lemtzas::Reddit::Monitor::Driver.new
+driver = Lemtzas::Reddit::Monitor::Driver.new(
+  subreddit_name: ENV['reddit_subreddit_name'],
+  scan_modmail: reddit_scan_modmail)
 driver.track
 puts "Driver ID: #{driver.uuid}"
 driver.run

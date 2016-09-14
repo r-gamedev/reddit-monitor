@@ -20,13 +20,15 @@ module Lemtzas
         include Common::Trackable
         attr_reader :id
 
-        def initialize
+        def initialize(subreddit_name: nil, scan_modmail: true)
+          raise "No subreddit specified." unless subreddit_name
           redd_safe = Reddit::ReddSafe.new(
             ENV['reddit_client_id'], ENV['reddit_client_secret'],
             ENV['reddit_username'], ENV['reddit_password'])
-          @modmail = Watch::Modmail.new(redd_safe)
-          @submissions = Watch::Submissions.new(redd_safe, 'gamedev')
-          @comments = Watch::Comments.new(redd_safe, 'gamedev')
+          @subreddit_name = subreddit_name
+          @modmail = Watch::Modmail.new(redd_safe) if scan_modmail
+          @submissions = Watch::Submissions.new(redd_safe, @subreddit_name)
+          @comments = Watch::Comments.new(redd_safe, @subreddit_name)
 
           @topic = init_bunny_topic
         end
@@ -69,6 +71,7 @@ module Lemtzas
         end
 
         def modmail_pass
+          return unless @modmail
           modmails = @modmail.latest
           modmails.each do |modmail|
             message = Common::Messaging::Reddit::Modmail.from_data(modmail)
@@ -81,6 +84,7 @@ module Lemtzas
         end
 
         def submissions_pass
+          return unless @submissions
           submissions = @submissions.latest
           submissions.each do |submission|
             message = Common::Messaging::Reddit::Submission.from_data(submission)
@@ -93,6 +97,7 @@ module Lemtzas
         end
 
         def comments_pass
+          return unless @comments
           comments = @comments.latest
           comments.each do |comment|
             message = Common::Messaging::Reddit::Comment.from_data(comment)
