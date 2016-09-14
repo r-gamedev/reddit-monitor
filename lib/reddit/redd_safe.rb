@@ -7,11 +7,12 @@ module Lemtzas
       TRY_LIMIT = 3
       attr_reader :redd
 
-      def initialize(client_id, client_secret, username, password)
+      def initialize(client_id, client_secret, username, password, useragent)
         @client_id = client_id
         @client_secret = client_secret
         @username = username
         @password = password
+        @useragent = useragent
         reconnect
       end
 
@@ -26,7 +27,8 @@ module Lemtzas
       def reconnect
         @redd = ::Redd.it(:script,
                           @client_id, @client_secret,
-                          @username, @password)
+                          @username, @password,
+                          user_agent: @useragent)
         @redd.authorize!
       end
 

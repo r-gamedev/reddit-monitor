@@ -20,11 +20,12 @@ module Lemtzas
         include Common::Trackable
         attr_reader :id
 
-        def initialize(subreddit_name: nil, scan_modmail: true)
-          raise "No subreddit specified." unless subreddit_name
+        def initialize(subreddit_name: nil, scan_modmail: true, useragent: nil)
+          raise 'No useragent specified.' unless useragent
+          raise 'No subreddit specified.' unless subreddit_name
           redd_safe = Reddit::ReddSafe.new(
             ENV['reddit_client_id'], ENV['reddit_client_secret'],
-            ENV['reddit_username'], ENV['reddit_password'])
+            ENV['reddit_username'], ENV['reddit_password'], useragent)
           @subreddit_name = subreddit_name
           @modmail = Watch::Modmail.new(redd_safe) if scan_modmail
           @submissions = Watch::Submissions.new(redd_safe, @subreddit_name)

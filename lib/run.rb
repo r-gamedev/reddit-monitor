@@ -16,6 +16,7 @@ require 'reddit/driver'
    reddit_client_secret
    reddit_username
    reddit_password
+   reddit_useragent
    reddit_subreddit_name
    reddit_scan_modmail
    rabbitmq_url)
@@ -31,13 +32,15 @@ reddit_scan_modmail = !!YAML.load(ENV['reddit_scan_modmail'])
 puts 'Hello, world!'
 puts "Process ID: #{Lemtzas::Common::Tracking.script_uuid}"
 puts "Subreddit to scan: #{ENV['reddit_subreddit_name']}"
-pubs "Scan Modmail? '#{ENV['reddit_scan_modmail']}' interpreted as '#{reddit_scan_modmail}'"
+puts "Scan Modmail? '#{ENV['reddit_scan_modmail']}' interpreted as '#{reddit_scan_modmail}'"
+puts "User Agent: #{ENV['reddit_useragent']}"
 ################
 
 # Run it
 driver = Lemtzas::Reddit::Monitor::Driver.new(
   subreddit_name: ENV['reddit_subreddit_name'],
-  scan_modmail: reddit_scan_modmail)
+  scan_modmail: reddit_scan_modmail,
+  useragent: ENV['reddit_useragent'])
 driver.track
 puts "Driver ID: #{driver.uuid}"
 driver.run
