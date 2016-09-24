@@ -22,8 +22,7 @@ module Lemtzas
         # Override in subclass to extend behavior
         def retrieve
           messages =
-            @redd.subreddit_from_name(@subreddit)
-                 .get_comments(limit: RETRIEVAL_COUNT)
+            @redd.get_comments(@subreddit, limit: RETRIEVAL_COUNT)
           messages.map do |m|
             TaggedData.new(m.name, m)
           end
