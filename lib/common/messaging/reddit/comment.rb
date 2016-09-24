@@ -41,7 +41,7 @@ module Lemtzas
 
           def shortlink
             actual_link_id = link_id.split('_')[1]
-            "http://reddit.com/r/#{subreddit}/#{actual_link_id}/-/#{id}"
+            "https://reddit.com/r/#{subreddit}/#{actual_link_id}/-/#{id}"
           end
 
           def shorttext(length = 40, strip_newlines = true)

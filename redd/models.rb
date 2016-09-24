@@ -57,7 +57,7 @@ module Lemtzas
                       :first_message_name
 
         def shortlink
-          "http://reddit.com/message/messages/#{id}"
+          "https://reddit.com/message/messages/#{id}"
         end
 
         def shorttext(length = 40, strip_newlines = true)
@@ -125,7 +125,7 @@ module Lemtzas
                       :num_reports
 
         def shortlink
-          "http://redd.it/#{id}"
+          "https://redd.it/#{id}"
         end
 
         def shorttext(length = 40, strip_newlines = true)
@@ -220,7 +220,7 @@ module Lemtzas
 
         def shortlink
           actual_link_id = link_id.split('_')[0]
-          "http://reddit.com/r/#{subreddit}/#{actual_link_id}../#{id}"
+          "https://reddit.com/r/#{subreddit}/#{actual_link_id}../#{id}"
         end
 
         def shorttext(length = 40, strip_newlines = true)
